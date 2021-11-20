@@ -28,6 +28,7 @@ class NetworkAdapter private constructor(builder: Builder){
     }
 }
 
+// More kotlin style builder (even though named components work best)
 class NetworkAdapter2(private val a: String? = null,
                       private val b: Int? = null) {
 
