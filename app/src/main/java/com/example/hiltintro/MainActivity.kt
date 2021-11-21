@@ -10,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import com.example.hiltintro.HiltIntroApplication
 import com.example.hiltintro.databinding.ActivityMainBinding
+import javax.inject.Named
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -26,23 +27,40 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var sampleString: SampleString
 
+    @Inject
+    @Named("StringsModuleString")
+    lateinit var stringsModuleString: String
+
     private lateinit var bind: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main) // Cant access DataBindingUtil class
         bind = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         service.log()
         adapter.log()
-        val hello = (application as HiltIntroApplication)
+        adapter2.log()
+
+        // Get string from Application class function
+        val applicationSampleString = (application as HiltIntroApplication)
             .getSampleString()
+        println("applicationSampleString= $applicationSampleString")
 
+        // old school binding
         findViewById<TextView>(R.id.sample).apply {
-            text = hello
+            text = applicationSampleString
         }
-        bind.sample.text = "hello 2"
+        // New school binding
+        bind.sample.text = applicationSampleString
 
+        // Get string from Application class
         println((application as HiltIntroApplication).anotherString)
+
+        // Get string from StringsModuleString
+        println("StringsModuleString= $stringsModuleString")
+
+        // Get string from SampleString class
+        println("sampleString= ${sampleString.getString()}")
     }
 }

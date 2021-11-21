@@ -30,9 +30,20 @@ class NetworkModule {
     }
 }
 
-class SampleString @Inject constructor() { // provides an instantiation of the class SampleString
+@Module
+@InstallIn(ActivityComponent::class) // Put into any Activity component
+class StringsModule {
+    @Provides
+    @Named("StringsModuleString")
+    fun provideStringsModuleString(): String {  // provides just the String
+        return "StringsModuleString Hello"
+    }
+}
+
+// provides an instance of the CLASS (not just the function, or the string)
+class SampleString @Inject constructor() { // provides an instantiation of the Class SampleString, CANNOT use @Named here!
     fun getString(): String {
-        return "Hello"
+        return "SampleString Hello"
     }
 }
 
@@ -41,7 +52,7 @@ class SampleString @Inject constructor() { // provides an instantiation of the c
 class ApplicationModule {
     @Provides
     @Named("Another String")
-    fun provideAnotherString(): String {  // provides just the String
+    fun provideAnotherString(): String {  // provides JUST the String
         return "Another Hello"
     }
 }
